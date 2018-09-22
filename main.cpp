@@ -1,5 +1,5 @@
 #include <vector>
-#include <fstream>
+#include <iostream>
 #include <algorithm>
 
 
@@ -36,15 +36,14 @@ long long get_hash(const vector<int>& d) {
 
 int main() {
 
-    ifstream input("input", ios::in);
     int n = 0;
     int seed = 0;
     int rows_count = 0;
-    input >> n >> seed >> rows_count;
+    cin >> n >> seed >> rows_count;
     vector<vector<int>> params(0);
     for (int i = 0; i < rows_count; ++i) {
         vector<int> items(3);
-        input >> items[0] >> items[1] >> items[2];
+        cin >> items[0] >> items[1] >> items[2];
         params.push_back(items);
     }
 
@@ -56,8 +55,7 @@ int main() {
 
     long long result = get_hash(source);
 
-    ofstream output("output", ios_base::out | ios_base::trunc);
-    output << result;
+    cout << result;
 
 
     return 0;
