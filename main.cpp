@@ -3,24 +3,42 @@
 #include <algorithm>
 
 
-#define __PROFILE__
+//#define __PROFILE__
 #ifdef __PROFILE__
 
 #include <chrono>
 
 #endif
 
-
 using namespace std;
+
+//#define __LOGGING__
+#ifdef __LOGGING__
+
+bool matrix_index = false;
+
+void print_log(int i, int j) {
+    cout << i << " - " << j << endl;
+}
+
+#endif
+
 
 void transpose(vector<int> &source, int initial_rank, int i_min, int j_min, int rank) {
 
     for (int i = 0; i < rank; ++i) {
         for (int j = i + 1; j < rank; ++j) {
             int position = (i + i_min) * initial_rank + j + j_min;
-            int new_position = (j + i_min) * initial_rank + i + j_min;
+            int next_position = (j + i_min) * initial_rank + i + j_min;
 
-            swap(source[position], source[new_position]);
+#ifdef __LOGGING__
+            if (matrix_index) {
+                print_log(i, j);
+            } else {
+                print_log(position, next_position);
+            }
+#endif
+            swap(source[position], source[next_position]);
 
             // 15% slower than swap
 //            int temp = source[position];
@@ -38,13 +56,33 @@ void transpose2(vector<int> &source, size_t n, int i_min, int j_min, int rank) {
 
 
     for (block = 0; block + size - 1 < rank; block += size) {
+
         for (int i = block; i < block + size; ++i) {
             for (int j = i + 1; j < block + size; ++j) {
+
+#ifdef __LOGGING__
+                if (matrix_index) {
+                    print_log(i, j);
+                } else {
+                    print_log((i + i_min) * n + j + j_min, (j + i_min) * n + i + j_min);
+                }
+#endif
+
                 swap(source[(i + i_min) * n + j + j_min], source[(j + i_min) * n + i + j_min]);
             }
         }
+
         for (int i = block + size; i < rank; ++i) {
             for (int j = block; j < block + size; ++j) {
+
+#ifdef __LOGGING__
+                if (matrix_index) {
+                    print_log(i, j);
+                } else {
+                    print_log((i + i_min) * n + j + j_min, (j + i_min) * n + i + j_min);
+                }
+#endif
+
                 swap(source[(i + i_min) * n + j + j_min], source[(j + i_min) * n + i + j_min]);
             }
         }
@@ -52,6 +90,13 @@ void transpose2(vector<int> &source, size_t n, int i_min, int j_min, int rank) {
 
     for (int i = block; i < rank; ++i) {
         for (int j = i + 1; j < rank; ++j) {
+#ifdef __LOGGING__
+            if (matrix_index) {
+                print_log(i, j);
+            } else {
+                print_log((i + i_min) * n + j + j_min, (j + i_min) * n + i + j_min);
+            }
+#endif
             swap(source[(i + i_min) * n + j + j_min], source[(j + i_min) * n + i + j_min]);
         }
     }
@@ -102,7 +147,7 @@ int main() {
 
 #ifdef __PROFILE__
     chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-    cout << " Time difference = " << chrono::duration_cast<chrono::milliseconds>(end - begin).count() << std::endl;
+    cout << " Time difference = " << chrono::duration_cast<chrono::milliseconds>(end - begin).count() << endl;
 #endif
 
 
