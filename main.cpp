@@ -33,30 +33,29 @@ void transpose(vector<int> &source, int initial_rank, int i_min, int j_min, int 
     }
 }
 
-void transpose2(vector<int> &m, size_t n, int i_min, int j_min, int rank) {
+void transpose2(vector<int> &source, size_t n, int i_min, int j_min, int rank) {
     int block = 0, size = 16;
 
 
     for (block = 0; block + size - 1 < rank; block += size) {
         for (int i = block; i < block + size; ++i) {
             for (int j = i + 1; j < block + size; ++j) {
-                swap(m[(i + i_min) * n + j + j_min], m[(j + i_min) * n + i + j_min]);
+                swap(source[(i + i_min) * n + j + j_min], source[(j + i_min) * n + i + j_min]);
             }
         }
         for (int i = block + size; i < rank; ++i) {
             for (int j = block; j < block + size; ++j) {
-                swap(m[(i + i_min) * n + j + j_min], m[(j + i_min) * n + i + j_min]);
+                swap(source[(i + i_min) * n + j + j_min], source[(j + i_min) * n + i + j_min]);
             }
         }
     }
 
     for (int i = block; i < rank; ++i) {
         for (int j = i + 1; j < rank; ++j) {
-            swap(m[(i + i_min) * n + j + j_min], m[(j + i_min) * n + i + j_min]);
+            swap(source[(i + i_min) * n + j + j_min], source[(j + i_min) * n + i + j_min]);
         }
     }
 }
-
 
 vector<int> generate_input(int n, int seed) {
     vector<int> d(n * n);
