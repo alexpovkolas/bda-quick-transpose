@@ -3,7 +3,7 @@
 #include <algorithm>
 
 
-//#define __PROFILE__
+#define __PROFILE__
 #ifdef __PROFILE__
 
 #include <chrono>
